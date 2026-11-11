@@ -1,0 +1,54 @@
+{% load static shop_tags %}
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Драгоценная Лилия — ювелирный магазин{% endblock %}</title>
+  <meta name="description" content="Каталог ювелирных украшений: кольца, браслеты, броши и колье.">
+  <link rel="icon" href="{% static 'img/favicon.png' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  {% include 'shop/theme.html' %}
+  <link rel="stylesheet" href="{% static 'css/vendor.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<div class="body-wrapper">
+  <header class="header-1 sticky-header">
+    <div class="header-bottom"><div class="container"><div class="row align-items-center py-3 gy-3">
+      <div class="col-lg-3 col-8"><div class="header-logo"><a class="heading_20" href="{% url 'home' %}" aria-label="Драгоценная Лилия — главная">Драгоценная Лилия</a></div></div>
+      <div class="col-lg-6 d-none d-lg-block"><nav aria-label="Главное меню"><ul class="main-menu list-unstyled justify-content-center mb-0">
+        <li class="menu-list-item nav-item"><a class="nav-link" href="{% url 'home' %}">Главная</a></li>
+        <li class="menu-list-item nav-item"><a class="nav-link" href="{% url 'catalog' %}">Каталог</a></li>
+        <li class="menu-list-item nav-item"><a class="nav-link" href="{% url 'contact' %}">Контакты</a></li>
+      </ul></nav></div>
+      <div class="col-lg-3 col-4"><div class="header-action d-flex align-items-center justify-content-end gap-3">
+        <a class="header-action-item" href="{% url 'wishlist' %}" aria-label="Избранное" title="Избранное"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></a>
+        <a class="header-action-item" href="{% if user.is_authenticated %}{% url 'profile' %}{% else %}{% url 'login' %}{% endif %}" aria-label="{% if user.is_authenticated %}Личный кабинет{% else %}Войти{% endif %}" title="Личный кабинет"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 22v-2a8 8 0 0 1 16 0v2"/></svg></a>
+        <a class="header-action-item d-flex align-items-center gap-1" href="{% url 'cart' %}" aria-label="Корзина, {{ cart_count }} товаров" title="Корзина"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 7h18l-2 15H5L3 7Z"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></svg><small>{{ cart_count }}</small></a>
+      </div></div>
+      <div class="col-12 d-lg-none"><nav class="d-flex justify-content-center gap-4" aria-label="Главное меню"><a href="{% url 'home' %}">Главная</a><a href="{% url 'catalog' %}">Каталог</a><a href="{% url 'contact' %}">Контакты</a></nav></div>
+    </div></div></div>
+    <div class="border-top"><div class="container"><div class="row align-items-center py-3 gy-3">
+      <div class="col-md-7"><nav class="d-flex flex-wrap gap-3 gap-lg-4" aria-label="Категории украшений">{% for category in nav_categories %}<a class="text_14" href="{{ category.get_absolute_url }}">{{ category.name }}</a>{% endfor %}</nav></div>
+      <div class="col-md-5"><form class="common-form" method="get" action="{% url 'catalog' %}" role="search"><div class="input-group"><label class="visually-hidden" for="header-search">Поиск украшений</label><input class="form-control" id="header-search" name="q" placeholder="Название, бренд, артикул" value="{{ query|default:'' }}"><button class="btn-primary" type="submit">Найти</button></div></form></div>
+    </div></div></div>
+  </header>
+  <main id="main-content" class="content-for-layout text-break">
+    {% if messages %}<div class="container mt-3" aria-live="polite">{% for message in messages %}<div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="status">{{ message }}</div>{% endfor %}</div>{% endif %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="mt-100 overflow-hidden">
+    <div class="footer-top bg-4"><div class="container"><div class="footer-widget-wrapper"><div class="row justify-content-between">
+      <div class="col-lg-4 col-md-6 footer-widget"><div class="footer-widget-inner"><h2 class="footer-heading">Драгоценная Лилия</h2><p class="text-white text_14">это ваши истории, воплощенные в драгоценном металле</p><a class="text-white text_14" href="{{ store_map_url }}" target="_blank" rel="noopener noreferrer">{{ store_address }}</a></div></div>
+      <div class="col-lg-3 col-md-6 footer-widget"><div class="footer-widget-inner"><h2 class="footer-heading">Каталог</h2><ul class="footer-menu list-unstyled d-block mb-0">{% for category in nav_categories %}<li class="footer-menu-item"><a href="{{ category.get_absolute_url }}">{{ category.name }}</a></li>{% endfor %}</ul></div></div>
+      <div class="col-lg-3 col-md-6 footer-widget"><div class="footer-widget-inner"><h2 class="footer-heading">Покупателю</h2><ul class="footer-menu list-unstyled d-block mb-0"><li class="footer-menu-item"><a href="{% url 'cart' %}">Корзина</a></li><li class="footer-menu-item"><a href="{% url 'wishlist' %}">Избранное</a></li><li class="footer-menu-item"><a href="{% url 'profile' %}">Личный кабинет</a></li><li class="footer-menu-item"><a href="{% url 'contact' %}">Контакты и самовывоз</a></li></ul></div></div>
+    </div></div></div></div>
+    <div class="footer-bottom bg-4"><div class="container"><p class="text-white text_12 py-3 mb-0">© {% now 'Y' %} Драгоценная Лилия</p></div></div>
+  </footer>
+</div>
+<script src="{% static 'js/vendor.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+</body></html>

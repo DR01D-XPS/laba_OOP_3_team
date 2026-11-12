@@ -1,0 +1,11 @@
+{% load shop_tags %}
+<div class="product-card ">
+  <div class="product-card-img">
+    <a class="d-block ratio ratio-1x1" href="{{ product.get_absolute_url }}">{% if product.image %}<img class="primary-img img-fluid" style="object-fit:contain" src="{{ product.image.url }}" loading="lazy" width="500" height="500" alt="{{ product.name }}">{% else %}<span class="d-flex align-items-center justify-content-center bg-light p-4 text-muted">Фото скоро появится</span>{% endif %}</a>
+    <form class="position-absolute top-0 end-0 p-2" method="post" action="{% url 'wishlist_toggle' product.pk %}">{% csrf_token %}<input type="hidden" name="next" value="{{ request.get_full_path }}"><button class="btn bg-white rounded-circle border-0 p-2 shadow-none" aria-pressed="{% if product.pk in wishlist_ids %}true{% else %}false{% endif %}" aria-label="{% if product.pk in wishlist_ids %}Удалить из избранного{% else %}В избранное{% endif %}" title="Избранное"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path fill="{% if product.pk in wishlist_ids %}currentColor{% else %}none{% endif %}" d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></button></form>
+  </div>
+  <div class="product-card-details"><p class="text_12 text-muted mt-3 mb-1">{{ product.brand|default:product.category.name }}</p><h3 class="product-card-title text-break"><a class="text-break" href="{{ product.get_absolute_url }}">{{ product.name }}</a></h3><div class="text_12 text-muted mt-2">{% if product.size %}Размер {{ product.size }}{% elif product.weight %}Вес {{ product.weight|floatformat:2 }} г{% else %}{{ product.category.name }}{% endif %}</div>
+    <p class="product-card-price"><span class="card-price-regular">{{ product.price|rub }}</span></p>
+    <form method="post" action="{% url 'cart_action' product.pk %}">{% csrf_token %}<input type="hidden" name="quantity" value="1"><input type="hidden" name="next" value="{{ request.get_full_path }}"><button class="btn-secondary w-100 mt-3" {% if not product.stock %}disabled{% endif %}>{% if product.stock %}В корзину{% else %}Нет в наличии{% endif %}</button></form>
+  </div>
+</div>

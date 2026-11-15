@@ -1,0 +1,20 @@
+{% extends 'shop/base.html' %}
+{% block title %}Контакты и самовывоз — Драгоценная Лилия{% endblock %}
+{% block content %}
+<section class="container mt-100">
+  <h1 class="section-heading mb-4">Контакты и самовывоз</h1>
+  <div class="row gy-4">
+    <div class="col-md-6"><div class="contact-info p-4 border h-100">
+      <h2 class="heading_24 mb-3">Адрес магазина</h2>
+      <p>{{ store_address }}</p><p>Владивосток, остров Русский</p>
+      <a class="btn-secondary mt-3" href="{{ store_map_url }}" target="_blank" rel="noopener noreferrer">Открыть в 2ГИС</a>
+    </div></div>
+    <div class="col-md-6"><div class="contact-info p-4 border h-100">
+      <h2 class="heading_24 mb-3">Как оформить заказ</h2>
+      <ol class="ps-3"><li class="mb-3">Выберите украшение и подходящий размер.</li><li class="mb-3">Добавьте его в корзину.</li><li class="mb-3">Заполните контактные данные.</li><li class="mb-3">Сохраните номер заказа.</li></ol>
+      <p>Самовывоз из магазина. Оплата при получении.</p>
+      <a class="btn-primary mt-3" href="{% url 'catalog' %}">Выбрать украшение</a>
+    </div></div>
+  </div>
+</section>
+{% endblock %}
